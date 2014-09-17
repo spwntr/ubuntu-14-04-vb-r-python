@@ -1,0 +1,8 @@
+---
+
+
+- hosts: all
+  sudo: yes
+  roles:
+    - python3
+    - r_project

@@ -1,0 +1,16 @@
+---
+
+
+- name: Install r_project
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - r-base
+    - r-cran-rodbc
+
+- name: Install rpy2
+  pip:
+    executable=pip3
+    name=rpy2
+    state=latest
