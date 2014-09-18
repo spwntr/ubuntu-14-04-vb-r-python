@@ -6,3 +6,4 @@
   roles:
     - python3
     - r_project
+    - postgresql

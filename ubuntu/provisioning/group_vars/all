@@ -1,0 +1,13 @@
+postgresql_host: localhost
+postgresql_port: 5432
+postgresql_database: pyrplaydb
+postgresql_username: tw
+postgresql_password: skunk
+
+postgresql_version: 9.3
+postgresql_admin_user: postgres
+
+postgresql_pg_hba_custom:
+ - { type: local, database: all, role: all, address: "", method: trust }
+ - { type: host, database: all, role: all, address: "0.0.0.0/0", method: trust }
+ - { type: host, database: all, role: all, address: "::/0", method: trust }

@@ -1,0 +1,55 @@
+---
+
+
+- name: Install Postgres Repo
+  apt_repository:
+    repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+    state=present
+
+- name: Install postgresql packages
+  apt:
+    update-cache=yes
+    pkg={{ item }}
+    state=present
+    force=yes
+  with_items:
+    - libpq-dev
+    - postgresql
+    - postgresql-contrib-{{ postgresql_version }}
+    - python-psycopg2
+  register: installed
+
+- name: Create configuration directory
+  file:
+    path=/etc/postgresql/{{ postgresql_version }}/main
+    owner={{ postgresql_admin_user }}
+    group={{ postgresql_admin_user }}
+    state=directory
+  when: installed.changed
+
+- name: Configure pg_hba.conf
+  template:
+    src=pg_hba.conf.j2
+    dest=/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+    owner={{ postgresql_admin_user }}
+    group={{ postgresql_admin_user }}
+    mode=0640
+  notify: Restart PostgreSQL
+  when: installed.changed
+
+- name: Configure postgresql.conf
+  copy:
+    src=postgresql.conf
+    dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+    owner={{ postgresql_admin_user }}
+    group={{ postgresql_admin_user }}
+    mode=0640
+  notify: Restart PostgreSQL
+  when: installed.changed
+
+
+- name: Start PostgreSQL server
+  service:
+    name=postgresql
+    state=started
+    enabled=yes
