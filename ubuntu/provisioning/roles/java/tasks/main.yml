@@ -1,0 +1,13 @@
+---
+
+
+- name: Get java open-jdk-jre-1.7
+  apt:
+    name=openjdk-7-*
+    state=latest
+
+- name: Link libjava.so into PATH
+  file:
+    src=/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+    dest=/usr/lib/libjvm.so
+    state=link
